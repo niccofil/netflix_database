@@ -42,14 +42,14 @@ with open("netflix_titles.csv") as file:
         names = actors + directors
         # Add names with unique id to people table
         for name in names:
-            if name not in people.keys():
+            if name.strip() not in people.keys():
                 cursor.execute("INSERT INTO people (name) VALUES(?)", (name.strip(),))
-                people[name] = cursor.lastrowid
+                people[name.strip()] = cursor.lastrowid
         # Add to joint table show_id and actor_id        
         for i in range(len(actors)):
-                    cursor.execute("INSERT INTO shows_actors (show_id, actor_id) VALUES(?,?)", (show_id, people[actors[i]]))
+                    cursor.execute("INSERT INTO shows_actors (show_id, actor_id) VALUES(?,?)", (show_id, people[actors[i].strip()]))
         # Add to joint table show_id and director_id  
         for i in range(len(directors)):
-                cursor.execute("INSERT INTO shows_directors (show_id, director_id) VALUES(?,?)", (show_id, people[directors[i]]))
+                cursor.execute("INSERT INTO shows_directors (show_id, director_id) VALUES(?,?)", (show_id, people[directors[i].strip()]))
 con.commit()
 con.close()
