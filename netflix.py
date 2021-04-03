@@ -11,7 +11,8 @@ cursor.execute("""CREATE TABLE shows (
     title TEXT,
     type TEXT,
     year INTEGER,
-    rating TEXT) """)
+    rating TEXT,
+    description TEXT)""")
 # Create people table
 cursor.execute("CREATE TABLE people (id INTEGER PRIMARY KEY, name TEXT)")
 # Create countries table
@@ -40,9 +41,9 @@ with open("netflix_titles.csv") as file:
     countries = {} 
     reader = csv.DictReader(file)
     for row in reader:
-        shows = [row["title"], row["type"], row["release_year"], row["rating"]]
+        show_attributes = [row["title"], row["type"], row["release_year"], row["rating"], row["description"]]
         # Insert values into shows table
-        cursor.execute("INSERT INTO shows (title, type, year, rating) VALUES (?,?,?,?)", shows)
+        cursor.execute("INSERT INTO shows (title, type, year, rating, description) VALUES (?,?,?,?,?)", show_attributes)
         show_id = cursor.lastrowid
         # List of actors in a given show
         actors = row["cast"].split(",")
