@@ -48,12 +48,10 @@ with open("netflix_titles.csv") as file:
         actors = row["cast"].split(",")
         # List  of directors in a given show
         directors = row["director"].split(",")
-        # List of actors and directors
-        names = actors + directors
         # List of countries
         ctries = row["country"].split(",")
         # Add names with unique id to people table
-        for name in names:
+        for name in (actors + directors):
             if name.strip() not in people.keys():
                 cursor.execute("INSERT INTO people (name) VALUES(?)", (name.strip(),))
                 people[name.strip()] = cursor.lastrowid
@@ -62,14 +60,13 @@ with open("netflix_titles.csv") as file:
             if country.strip() not in countries.keys():
                 cursor.execute("INSERT INTO countries(country) VALUES(?)", (country.strip(),))
                 countries[country.strip()] = cursor.lastrowid
-        # Add to joint table show_id and actor_id        
+                # Add to joint table show_id and country_id
+                cursor.execute("INSERT INTO shows_countries (show_id, country_id) VALUES(?,?)", (show_id, countries[country.strip()]))     
+        # Add to joint table show_id and actor_id  
         for i in range(len(actors)):
-                    cursor.execute("INSERT INTO shows_actors (show_id, actor_id) VALUES(?,?)", (show_id, people[actors[i].strip()]))
-        # Add to joint table show_id and director_id  
+            cursor.execute("INSERT INTO shows_actors (show_id, actor_id) VALUES(?,?)", (show_id, people[actors[i].strip()]))
+        # Add to joint table show_id and director_id 
         for i in range(len(directors)):
-                cursor.execute("INSERT INTO shows_directors (show_id, director_id) VALUES(?,?)", (show_id, people[directors[i].strip()]))
-        # Add to joint table show_id and country_id  
-        for i in range(len(ctries)):
-                cursor.execute("INSERT INTO shows_countries (show_id, country_id) VALUES(?,?)", (show_id, countries[ctries[i].strip()]))
+            cursor.execute("INSERT INTO shows_directors (show_id, director_id) VALUES(?,?)", (show_id, people[directors[i].strip()]))
 con.commit()
 con.close() 
