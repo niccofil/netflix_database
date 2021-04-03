@@ -12,7 +12,7 @@ cursor.execute("""CREATE TABLE shows (
     type TEXT,
     year INTEGER,
     rating TEXT) """)
-# Create actors table
+# Create people table
 cursor.execute("CREATE TABLE people (id INTEGER PRIMARY KEY, name TEXT)")
 # Link shows table to actors table
 cursor.execute("""CREATE TABLE shows_actors (
