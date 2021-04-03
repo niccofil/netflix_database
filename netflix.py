@@ -49,15 +49,13 @@ with open("netflix_titles.csv") as file:
         actors = row["cast"].split(",")
         # List  of directors in a given show
         directors = row["director"].split(",")
-        # List of countries
-        ctries = row["country"].split(",")
         # Add names with unique id to people table
         for name in (actors + directors):
             if name.strip() not in people.keys():
                 cursor.execute("INSERT INTO people (name) VALUES(?)", (name.strip(),))
                 people[name.strip()] = cursor.lastrowid
         # Add countris with unique id to countries table
-        for country in ctries:
+        for country in row["country"].split(","):
             if country.strip() not in countries.keys():
                 cursor.execute("INSERT INTO countries(country) VALUES(?)", (country.strip(),))
                 countries[country.strip()] = cursor.lastrowid
